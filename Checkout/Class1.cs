@@ -7,13 +7,13 @@ namespace Checkout
     [TestFixture]
     public class Class1
     {
-        private ISkuFactory _skuFactory;
-
         [SetUp]
         public void fixture_setup()
         {
-            _skuFactory = new SkuFactory();
+            _basket = new Basket(new PricingRules());
         }
+
+        private IBasket _basket;
 
         [TestCase('A', Result = 50)]
         [TestCase('B', Result = 30)]
@@ -22,64 +22,33 @@ namespace Checkout
         public int get_price_of_single_sku_should_equal_expected_price(char sku)
         {
             // act
-            _skuFactory.Scan(sku);
+            _basket.Scan(sku);
 
             // assert
-            return _skuFactory.GetBasketTotal();
+            return _basket.Total;
         }
 
-        [TestCase(new char[] { 'A', 'A' }, TestName = "2x A skus", Result = 100)]
-        [TestCase(new char[] { 'B', 'B' }, TestName = "2x B skus", Result = 45)]
-        [TestCase(new char[] { 'C', 'C' }, TestName = "2x C skus", Result = 40)]
-        [TestCase(new char[] { 'D', 'D' }, TestName = "2x D skus", Result = 30)]
-        [TestCase(new char[] { 'A', 'B' }, TestName = "1x A and 1x B skus, multiple types", Result = 80)]
-        [TestCase(new char[] { 'A', 'B', 'A' }, TestName = "2x A and 1x B skus, unordered", Result = 130)]
-        [TestCase(new char[] { 'A', 'A', 'A' }, TestName = "3x A skus, discount expected", Result = 130)]
+        [TestCase(new[] { 'A', 'A' }, TestName = "2x A skus", Result = 100)]
+        [TestCase(new[] { 'B', 'B' }, TestName = "2x B skus", Result = 45)]
+        [TestCase(new[] { 'C', 'C' }, TestName = "2x C skus", Result = 40)]
+        [TestCase(new[] { 'D', 'D' }, TestName = "2x D skus", Result = 30)]
+        [TestCase(new[] { 'A', 'B' }, TestName = "1x A and 1x B skus, multiple types", Result = 80)]
+        [TestCase(new[] { 'A', 'B', 'A' }, TestName = "2x A and 1x B skus, unordered", Result = 130)]
+        [TestCase(new[] { 'A', 'A', 'A' }, TestName = "3x A skus, discount expected", Result = 130)]
+        //[TestCase(new[] {'A', 'A', 'A', 'B', 'B'}, TestName = "3x A and 2x B skus, discount expected", Result = 175)]
         public int get_price_of_2_skus_should_equal_twice_the_price(char[] skus)
         {
             // act
-            _skuFactory.Scan(skus);
+            _basket.Scan(skus);
 
             // assert
-            return _skuFactory.GetBasketTotal();
+            return _basket.Total;
         }
     }
 
-    public class SkuFactory : ISkuFactory
+    public class PricingRules : IPricingRules
     {
-        private readonly List<char> _scannedSkus;
-
-        public SkuFactory()
-        {
-            _scannedSkus = new List<char>();
-        }
-
-        public void Scan(char sku)
-        {
-            _scannedSkus.Add(sku);
-        }
-
-        public void Scan(char[] skus)
-        {
-            _scannedSkus.AddRange(skus);
-        }
-
-        public int GetBasketTotal()
-        {
-            if (_scannedSkus.Count == 2 && _scannedSkus.All(x => x == 'B'))
-            {
-                return _scannedSkus.Sum(x => GetSkuPrice(x)) - 15;
-            }
-
-            if (_scannedSkus.Count == 3 && _scannedSkus.All(x => x == 'A'))
-            {
-                return _scannedSkus.Sum(x => GetSkuPrice(x)) - 20;
-            }
-
-            return _scannedSkus.Sum(x => GetSkuPrice(x));
-        }
-
-        private static int GetSkuPrice(char sku)
+        public int GetSkuPrice(char sku)
         {
             if (sku == 'D')
             {
@@ -100,11 +69,57 @@ namespace Checkout
         }
     }
 
-    public interface ISkuFactory
+    public class Basket : IBasket
     {
-        void Scan(char sku);
+        public int Total {
+            get { return GetBasketTotal(); }
+        }
 
-        int GetBasketTotal();
+        private readonly List<char> _scannedSkus;
+        private readonly IPricingRules _pricingRules;
+
+        public Basket(IPricingRules pricingRules)
+        {
+            _scannedSkus = new List<char>();
+            _pricingRules = pricingRules;
+        }
+
+        public void Scan(char sku)
+        {
+            _scannedSkus.Add(sku);
+        }
+
+        public void Scan(char[] skus)
+        {
+            _scannedSkus.AddRange(skus);
+        }
+
+        public int GetBasketTotal()
+        {
+            if (_scannedSkus.Count == 2 && _scannedSkus.All(x => x == 'B'))
+            {
+                return _scannedSkus.Sum(x => _pricingRules.GetSkuPrice(x)) - 15;
+            }
+
+            if (_scannedSkus.Count == 3 && _scannedSkus.All(x => x == 'A'))
+            {
+                return _scannedSkus.Sum(x => _pricingRules.GetSkuPrice(x)) - 20;
+            }
+
+            return _scannedSkus.Sum(x => _pricingRules.GetSkuPrice(x));
+        }
+    }
+
+    public interface IPricingRules
+    {
+        int GetSkuPrice(char sku);
+    }
+
+    public interface IBasket
+    {
+        int Total { get; }
+
+        void Scan(char sku);
 
         void Scan(char[] skus);
     }
