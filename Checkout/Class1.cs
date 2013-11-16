@@ -15,11 +15,11 @@ namespace Checkout
             _skuFactory = new SkuFactory();
         }
 
-        [TestCase('A', 50, Result = 50)]
-        [TestCase('B', 30, Result = 30)]
-        [TestCase('C', 20, Result = 20)]
-        [TestCase('D', 15, Result = 15)]
-        public int get_price_of_single_sku_should_equal_expected_price(char sku, int expectedPrice)
+        [TestCase('A', Result = 50)]
+        [TestCase('B', Result = 30)]
+        [TestCase('C', Result = 20)]
+        [TestCase('D', Result = 15)]
+        public int get_price_of_single_sku_should_equal_expected_price(char sku)
         {
             // act
             _skuFactory.Scan(sku);
@@ -28,47 +28,59 @@ namespace Checkout
             return _skuFactory.GetBasketTotal();
         }
 
-        [Test]
-        public void get_price_of_2_A_skus_should_equal_100()
+        [TestCase(new char[] { 'A', 'A' }, TestName = "2x A skus", Result = 100)]
+        [TestCase(new char[] { 'B', 'B' }, TestName = "2x B skus", Result = 60)]
+        [TestCase(new char[] { 'C', 'C' }, TestName = "2x C skus", Result = 40)]
+        public int get_price_of_2_skus_should_equal_twice_the_price(char[] skus)
         {
-            // arrange
-            var expected = 100;
-            var skus = new[] {'A', 'A'};
-
             // act
             _skuFactory.Scan(skus);
 
             // assert
-            Assert.AreEqual(expected, _skuFactory.GetBasketTotal());
+            return _skuFactory.GetBasketTotal();
         }
 
-        [Test]
-        public void get_price_of_2_B_skus_should_equal_60()
-        {
-            // arrange
-            var expected = 60;
-            var skus = new[] {'B', 'B'};
+        //[Test]
+        //public void get_price_of_2_A_skus_should_equal_100()
+        //{
+        //    // arrange
+        //    var expected = 100;
+        //    var skus = new[] {'A', 'A'};
 
-            // act
-            _skuFactory.Scan(skus);
+        //    // act
+        //    _skuFactory.Scan(skus);
 
-            // assert
-            Assert.AreEqual(expected, _skuFactory.GetBasketTotal());
-        }
+        //    // assert
+        //    Assert.AreEqual(expected, _skuFactory.GetBasketTotal());
+        //}
 
-        [Test]
-        public void get_price_of_2_C_skus_should_equal_40()
-        {
-            // arrange
-            var expected = 40;
-            var skus = new[] {'C', 'C'};
+        //[Test]
+        //public void get_price_of_2_B_skus_should_equal_60()
+        //{
+        //    // arrange
+        //    var expected = 60;
+        //    var skus = new[] {'B', 'B'};
 
-            // act
-            _skuFactory.Scan(skus);
+        //    // act
+        //    _skuFactory.Scan(skus);
 
-            // assert
-            Assert.AreEqual(expected, _skuFactory.GetBasketTotal());
-        }
+        //    // assert
+        //    Assert.AreEqual(expected, _skuFactory.GetBasketTotal());
+        //}
+
+        //[Test]
+        //public void get_price_of_2_C_skus_should_equal_40()
+        //{
+        //    // arrange
+        //    var expected = 40;
+        //    var skus = new[] {'C', 'C'};
+
+        //    // act
+        //    _skuFactory.Scan(skus);
+
+        //    // assert
+        //    Assert.AreEqual(expected, _skuFactory.GetBasketTotal());
+        //}
     }
 
     public class SkuFactory : ISkuFactory
