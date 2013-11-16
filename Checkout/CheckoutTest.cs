@@ -38,6 +38,7 @@ namespace Checkout
         [TestCase(new[] { 'A', 'B' }, TestName = "1x A and 1x B skus, multiple types", Result = 80)]
         [TestCase(new[] { 'A', 'B', 'A' }, TestName = "2x A and 1x B skus, unordered", Result = 130)]
         [TestCase(new[] { 'A', 'A', 'A' }, TestName = "3x A skus, discount expected", Result = 130)]
+        [TestCase(new[] { 'A', 'A', 'A', 'A', 'A', 'A' }, TestName = "6x A skus, discount expected", Result = 260)]
         [TestCase(new[] { 'A', 'A', 'A', 'B', 'B' }, TestName = "3x A and 2x B skus, discount expected", Result = 175)]
         [TestCase(new[] { 'A', 'A', 'A', 'B', 'B', 'A', 'A', 'A' }, TestName = "6x A and 2x B skus, discount expected", Result = 305)]
         public int get_price_of_multiple_skus(char[] skus)

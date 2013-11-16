@@ -44,7 +44,7 @@
   <ItemGroup>
     <Compile Include="Checkout.cs" />
     <Compile Include="CheckoutTest.cs" />
-    <Compile Include="IDiscountRule.cs" />
+    <Compile Include="DiscountRule.cs" />
     <Compile Include="PricingEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SkuPricingRule.cs" />
