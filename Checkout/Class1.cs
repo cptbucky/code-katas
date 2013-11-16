@@ -29,11 +29,25 @@ namespace Checkout
         }
 
         [Test]
-        public void get_price_of_2_sku_As_should_equal_100()
+        public void get_price_of_2_A_skus_should_equal_100()
         {
             // arrange
             var expected = 100;
             var skus = new[] {'A', 'A'};
+
+            // act
+            _skuFactory.Scan(skus);
+
+            // assert
+            Assert.AreEqual(expected, _skuFactory.GetBasketTotal());
+        }
+
+        [Test]
+        public void get_price_of_2_B_skus_should_equal_60()
+        {
+            // arrange
+            var expected = 60;
+            var skus = new[] {'B', 'B'};
 
             // act
             _skuFactory.Scan(skus);
