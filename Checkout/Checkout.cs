@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Checkout
 {
@@ -13,36 +12,21 @@ namespace Checkout
     public class Checkout : ICheckout
     {
         public int Total {
-            get { return GetBasketTotal(); }
+            get { return _pricingEngine.GetTotalPriceOfSkus(_scannedSkus.ToArray()); }
         }
 
         private readonly List<char> _scannedSkus;
-        private readonly IPricingRules _pricingRules;
+        private readonly IPricingEngine _pricingEngine;
 
-        public Checkout(IPricingRules pricingRules)
+        public Checkout(IPricingEngine pricingEngine)
         {
             _scannedSkus = new List<char>();
-            _pricingRules = pricingRules;
+            _pricingEngine = pricingEngine;
         }
 
         public void Scan(char sku)
         {
             _scannedSkus.Add(sku);
-        }
-
-        public int GetBasketTotal()
-        {
-            if (_scannedSkus.Count == 2 && _scannedSkus.All(x => x == 'B'))
-            {
-                return _scannedSkus.Sum(x => _pricingRules.GetSkuPrice(x)) - 15;
-            }
-
-            if (_scannedSkus.Count == 3 && _scannedSkus.All(x => x == 'A'))
-            {
-                return _scannedSkus.Sum(x => _pricingRules.GetSkuPrice(x)) - 20;
-            }
-
-            return _scannedSkus.Sum(x => _pricingRules.GetSkuPrice(x));
         }
     }
 }

@@ -44,8 +44,10 @@
   <ItemGroup>
     <Compile Include="Checkout.cs" />
     <Compile Include="CheckoutTest.cs" />
-    <Compile Include="PricingRules.cs" />
+    <Compile Include="IDiscountRule.cs" />
+    <Compile Include="PricingEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkuPricingRule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
