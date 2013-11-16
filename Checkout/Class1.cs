@@ -33,8 +33,27 @@ namespace Checkout
             Assert.AreEqual(expected, actual);
         }
 
+        [Test]
+        public void get_price_of_single_C_should_equal_20()
+        {
+            // arrange
+            var expected = 20;
+            var item = 'C';
+
+            // act
+            var actual = Scan(item);
+
+            // assert
+            Assert.AreEqual(expected, actual);
+        }
+
         private object Scan(char item)
         {
+            if (item == 'C')
+            {
+                return 20;
+            }
+
             if (item == 'B')
             {
                 return 30;
