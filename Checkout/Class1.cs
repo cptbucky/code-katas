@@ -34,6 +34,7 @@ namespace Checkout
         [TestCase(new char[] { 'D', 'D' }, TestName = "2x D skus", Result = 30)]
         [TestCase(new char[] { 'A', 'B' }, TestName = "1x A and 1x B skus, multiple types", Result = 80)]
         [TestCase(new char[] { 'A', 'B', 'A' }, TestName = "2x A and 1x B skus, unordered", Result = 130)]
+        [TestCase(new char[] { 'A', 'A', 'A' }, TestName = "3x A skus, discount expected", Result = 130)]
         public int get_price_of_2_skus_should_equal_twice_the_price(char[] skus)
         {
             // act
@@ -65,6 +66,11 @@ namespace Checkout
 
         public int GetBasketTotal()
         {
+            if (_scannedSkus.Count == 3 && _scannedSkus.All(x => x == 'A'))
+            {
+                return _scannedSkus.Sum(x => GetSkuPrice(x)) - 20;
+            }
+
             return _scannedSkus.Sum(x => GetSkuPrice(x));
         }
 
