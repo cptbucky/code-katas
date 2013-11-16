@@ -5,19 +5,19 @@ namespace Checkout
     [TestFixture]
     public class Class1
     {
-        [TestCase('A', 50)]
-        [TestCase('B', 30)]
-        [TestCase('C', 20)]
-        public void get_price_of_single_sku_should_equal_expected_price(char sku, int expectedPrice)
+        [TestCase('A', 50, Result = 50)]
+        [TestCase('B', 30, Result = 30)]
+        [TestCase('C', 20, Result = 20)]
+        public int get_price_of_single_sku_should_equal_expected_price(char sku, int expectedPrice)
         {
             // act
             var actualPrice = Scan(sku);
 
             // assert
-            Assert.AreEqual(expectedPrice, actualPrice);
+            return actualPrice;
         }
 
-        private object Scan(char item)
+        private int Scan(char item)
         {
             if (item == 'C')
             {
