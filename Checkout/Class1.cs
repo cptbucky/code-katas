@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Checkout
 {
@@ -10,10 +8,10 @@ namespace Checkout
         [SetUp]
         public void fixture_setup()
         {
-            _basket = new Basket(new PricingRules());
+            _checkout = new Checkout(new PricingRules());
         }
 
-        private IBasket _basket;
+        private ICheckout _checkout;
 
         [TestCase('A', Result = 50)]
         [TestCase('B', Result = 30)]
@@ -22,10 +20,10 @@ namespace Checkout
         public int get_price_of_single_sku_should_equal_expected_price(char sku)
         {
             // act
-            _basket.Scan(sku);
+            _checkout.Scan(sku);
 
             // assert
-            return _basket.Total;
+            return _checkout.Total;
         }
 
         [TestCase(new[] { 'A', 'A' }, TestName = "2x A skus", Result = 100)]
@@ -39,88 +37,10 @@ namespace Checkout
         public int get_price_of_2_skus_should_equal_twice_the_price(char[] skus)
         {
             // act
-            _basket.Scan(skus);
+            _checkout.Scan(skus);
 
             // assert
-            return _basket.Total;
+            return _checkout.Total;
         }
-    }
-
-    public class PricingRules : IPricingRules
-    {
-        public int GetSkuPrice(char sku)
-        {
-            if (sku == 'D')
-            {
-                return 15;
-            }
-
-            if (sku == 'C')
-            {
-                return 20;
-            }
-
-            if (sku == 'B')
-            {
-                return 30;
-            }
-
-            return 50;
-        }
-    }
-
-    public class Basket : IBasket
-    {
-        public int Total {
-            get { return GetBasketTotal(); }
-        }
-
-        private readonly List<char> _scannedSkus;
-        private readonly IPricingRules _pricingRules;
-
-        public Basket(IPricingRules pricingRules)
-        {
-            _scannedSkus = new List<char>();
-            _pricingRules = pricingRules;
-        }
-
-        public void Scan(char sku)
-        {
-            _scannedSkus.Add(sku);
-        }
-
-        public void Scan(char[] skus)
-        {
-            _scannedSkus.AddRange(skus);
-        }
-
-        public int GetBasketTotal()
-        {
-            if (_scannedSkus.Count == 2 && _scannedSkus.All(x => x == 'B'))
-            {
-                return _scannedSkus.Sum(x => _pricingRules.GetSkuPrice(x)) - 15;
-            }
-
-            if (_scannedSkus.Count == 3 && _scannedSkus.All(x => x == 'A'))
-            {
-                return _scannedSkus.Sum(x => _pricingRules.GetSkuPrice(x)) - 20;
-            }
-
-            return _scannedSkus.Sum(x => _pricingRules.GetSkuPrice(x));
-        }
-    }
-
-    public interface IPricingRules
-    {
-        int GetSkuPrice(char sku);
-    }
-
-    public interface IBasket
-    {
-        int Total { get; }
-
-        void Scan(char sku);
-
-        void Scan(char[] skus);
     }
 }
