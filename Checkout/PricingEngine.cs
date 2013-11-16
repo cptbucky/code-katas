@@ -22,7 +22,7 @@ namespace Checkout
 
         public int GetTotalPriceOfSkus(char[] skus)
         {
-            var rawPrice = skus.Sum(x => SkuPricingRules[x].UnitPrice);
+            var rawPrice = skus.Sum(x => SkuPricingRules[x].SkuUnitPrice);
             var discountsToApply = 0;
 
             var linesInOrder = skus.Distinct();
