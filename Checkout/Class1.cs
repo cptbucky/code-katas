@@ -1,10 +1,20 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
 
 namespace Checkout
 {
     [TestFixture]
     public class Class1
     {
+        private ISkuFactory _skuFactory;
+
+        [SetUp]
+        public void fixture_setup()
+        {
+            _skuFactory = new SkuFactory();
+        }
+
         [TestCase('A', 50, Result = 50)]
         [TestCase('B', 30, Result = 30)]
         [TestCase('C', 20, Result = 20)]
@@ -12,30 +22,78 @@ namespace Checkout
         public int get_price_of_single_sku_should_equal_expected_price(char sku, int expectedPrice)
         {
             // act
-            var actualPrice = Scan(sku);
+            _skuFactory.Scan(sku);
 
             // assert
-            return actualPrice;
+            return _skuFactory.GetBasketTotal();
         }
 
-        private int Scan(char item)
+        [Test]
+        public void get_price_of_2_sku_As_should_equal_100()
         {
-            if (item == 'D')
+            // arrange
+            var expected = 100;
+            var skus = new[] {'A', 'A'};
+
+            // act
+            _skuFactory.Scan(skus);
+
+            // assert
+            Assert.AreEqual(expected, _skuFactory.GetBasketTotal());
+        }
+    }
+
+    public class SkuFactory : ISkuFactory
+    {
+        private readonly List<char> _scannedSkus;
+
+        public SkuFactory()
+        {
+            _scannedSkus = new List<char>();
+        }
+
+        public void Scan(char sku)
+        {
+            _scannedSkus.Add(sku);
+        }
+
+        public void Scan(char[] skus)
+        {
+            _scannedSkus.AddRange(skus);
+        }
+
+        public int GetBasketTotal()
+        {
+            return _scannedSkus.Sum(x => GetSkuPrice(x));
+        }
+
+        private static int GetSkuPrice(char sku)
+        {
+            if (sku == 'D')
             {
                 return 15;
             }
 
-            if (item == 'C')
+            if (sku == 'C')
             {
                 return 20;
             }
 
-            if (item == 'B')
+            if (sku == 'B')
             {
                 return 30;
             }
 
             return 50;
         }
+    }
+
+    public interface ISkuFactory
+    {
+        void Scan(char sku);
+
+        int GetBasketTotal();
+
+        void Scan(char[] skus);
     }
 }
