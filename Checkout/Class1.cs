@@ -55,6 +55,20 @@ namespace Checkout
             // assert
             Assert.AreEqual(expected, _skuFactory.GetBasketTotal());
         }
+
+        [Test]
+        public void get_price_of_2_C_skus_should_equal_40()
+        {
+            // arrange
+            var expected = 40;
+            var skus = new[] {'C', 'C'};
+
+            // act
+            _skuFactory.Scan(skus);
+
+            // assert
+            Assert.AreEqual(expected, _skuFactory.GetBasketTotal());
+        }
     }
 
     public class SkuFactory : ISkuFactory
