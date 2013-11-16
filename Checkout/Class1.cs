@@ -31,6 +31,7 @@ namespace Checkout
         [TestCase(new char[] { 'A', 'A' }, TestName = "2x A skus", Result = 100)]
         [TestCase(new char[] { 'B', 'B' }, TestName = "2x B skus", Result = 60)]
         [TestCase(new char[] { 'C', 'C' }, TestName = "2x C skus", Result = 40)]
+        [TestCase(new char[] { 'D', 'D' }, TestName = "2x D skus", Result = 30)]
         public int get_price_of_2_skus_should_equal_twice_the_price(char[] skus)
         {
             // act
@@ -39,48 +40,6 @@ namespace Checkout
             // assert
             return _skuFactory.GetBasketTotal();
         }
-
-        //[Test]
-        //public void get_price_of_2_A_skus_should_equal_100()
-        //{
-        //    // arrange
-        //    var expected = 100;
-        //    var skus = new[] {'A', 'A'};
-
-        //    // act
-        //    _skuFactory.Scan(skus);
-
-        //    // assert
-        //    Assert.AreEqual(expected, _skuFactory.GetBasketTotal());
-        //}
-
-        //[Test]
-        //public void get_price_of_2_B_skus_should_equal_60()
-        //{
-        //    // arrange
-        //    var expected = 60;
-        //    var skus = new[] {'B', 'B'};
-
-        //    // act
-        //    _skuFactory.Scan(skus);
-
-        //    // assert
-        //    Assert.AreEqual(expected, _skuFactory.GetBasketTotal());
-        //}
-
-        //[Test]
-        //public void get_price_of_2_C_skus_should_equal_40()
-        //{
-        //    // arrange
-        //    var expected = 40;
-        //    var skus = new[] {'C', 'C'};
-
-        //    // act
-        //    _skuFactory.Scan(skus);
-
-        //    // assert
-        //    Assert.AreEqual(expected, _skuFactory.GetBasketTotal());
-        //}
     }
 
     public class SkuFactory : ISkuFactory
