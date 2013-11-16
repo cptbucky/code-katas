@@ -29,7 +29,7 @@ namespace Checkout
         }
 
         [TestCase(new char[] { 'A', 'A' }, TestName = "2x A skus", Result = 100)]
-        [TestCase(new char[] { 'B', 'B' }, TestName = "2x B skus", Result = 60)]
+        [TestCase(new char[] { 'B', 'B' }, TestName = "2x B skus", Result = 45)]
         [TestCase(new char[] { 'C', 'C' }, TestName = "2x C skus", Result = 40)]
         [TestCase(new char[] { 'D', 'D' }, TestName = "2x D skus", Result = 30)]
         [TestCase(new char[] { 'A', 'B' }, TestName = "1x A and 1x B skus, multiple types", Result = 80)]
@@ -66,6 +66,11 @@ namespace Checkout
 
         public int GetBasketTotal()
         {
+            if (_scannedSkus.Count == 2 && _scannedSkus.All(x => x == 'B'))
+            {
+                return _scannedSkus.Sum(x => GetSkuPrice(x)) - 15;
+            }
+
             if (_scannedSkus.Count == 3 && _scannedSkus.All(x => x == 'A'))
             {
                 return _scannedSkus.Sum(x => GetSkuPrice(x)) - 20;
