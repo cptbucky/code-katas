@@ -8,8 +8,6 @@ namespace Checkout
         int Total { get; }
 
         void Scan(char sku);
-
-        void Scan(char[] skus);
     }
 
     public class Checkout : ICheckout
@@ -30,11 +28,6 @@ namespace Checkout
         public void Scan(char sku)
         {
             _scannedSkus.Add(sku);
-        }
-
-        public void Scan(char[] skus)
-        {
-            _scannedSkus.AddRange(skus);
         }
 
         public int GetBasketTotal()

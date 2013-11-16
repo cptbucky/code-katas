@@ -43,7 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checkout.cs" />
-    <Compile Include="Class1.cs" />
+    <Compile Include="CheckoutTest.cs" />
     <Compile Include="PricingRules.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
