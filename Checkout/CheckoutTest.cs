@@ -51,5 +51,37 @@ namespace Checkout
             // assert
             return _checkout.Total;
         }
+
+        [Test]
+        public void incremental_total_check_for_multiple_skus()
+        {
+            _checkout.Scan('A');
+
+            Assert.AreEqual(_checkout.Total, 50);
+
+            _checkout.Scan('B');
+
+            Assert.AreEqual(_checkout.Total, 80);
+
+            _checkout.Scan('C');
+
+            Assert.AreEqual(_checkout.Total, 100);
+
+            _checkout.Scan('D');
+
+            Assert.AreEqual(_checkout.Total, 115);
+
+            _checkout.Scan('B');
+
+            Assert.AreEqual(_checkout.Total, 130);
+
+            _checkout.Scan('A');
+
+            Assert.AreEqual(_checkout.Total, 180);
+
+            _checkout.Scan('A');
+
+            Assert.AreEqual(_checkout.Total, 210);
+        }
     }
 }
