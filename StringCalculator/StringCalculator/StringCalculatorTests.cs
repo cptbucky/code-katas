@@ -72,27 +72,59 @@ namespace StringCalculator
             Assert.AreEqual(expected, actual);
         }
 
-        private int Add(string numbers)
+        [TestCase("//;\n1;2;1")]
+        [TestCase("//,\n1,2,1")]
+        [TestCase("//|\n1|2|1")]
+        public void provide_delimeter_add_three_numbers_should_return_sum(string input)
+        {
+            int expected = 4;
+            int actual = Add(input);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        private static int Add(string numbers)
         {
             if (numbers == string.Empty)
             {
                 return 0;
             }
 
-            var singles = GetIntArray(numbers);
+            var delimeter = GetDelimeterFromString(numbers);
+
+            var stringToProcess = ExtractStringOfNumbers(numbers, delimeter);
+
+            var singles = GetIntArray(stringToProcess, delimeter);
 
             return singles.Sum();
         }
 
-        private static int[] GetIntArray(string numbers)
+        private static string ExtractStringOfNumbers(string numbers, char delimeter)
         {
-            var delimeter = '|';
+            string stringToProcess = numbers;
 
-            var singleDelimeted = numbers.Replace('\n', delimeter).Replace(',', delimeter);
+            if (numbers.StartsWith("//"))
+            {
+                stringToProcess = numbers.Split('\n')[1];
+            }
 
-            //var delimeter = numbers.Contains("\n") ? '\n' : ',';
+            return stringToProcess.Replace('\n', delimeter).Replace(',', delimeter);
+        }
 
-            int[] singles = singleDelimeted.Split(delimeter).Select(x => Convert.ToInt32(x)).ToArray();
+        private static char GetDelimeterFromString(string numbers)
+        {
+            if (numbers.StartsWith("//"))
+            {
+                return Convert.ToChar(numbers.Split('\n')[0].Replace("//", string.Empty));
+            }
+
+            return '|';
+        }
+
+        private static int[] GetIntArray(string numbers, char delimeter)
+        {
+            int[] singles = numbers.Split(delimeter).Select(x => Convert.ToInt32(x)).ToArray();
+
             return singles;
         }
     }
