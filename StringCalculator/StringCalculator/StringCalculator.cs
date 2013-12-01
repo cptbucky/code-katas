@@ -13,20 +13,22 @@ namespace StringCalculator
                 return 0;
             }
 
-            var delimeter = GetDelimeterFromString(numbers);
+            string delimeter = StringContainsDelimeter(numbers) 
+                ? GetDelimeterFromString(numbers) 
+                : "|";
 
-            var stringToProcess = ExtractStringOfNumbers(numbers, delimeter);
+            var stringToProcess = ExtractNumberString(numbers, delimeter);
 
             var singles = GetIntArray(stringToProcess, delimeter);
 
             return singles.Sum();
         }
 
-        private static string ExtractStringOfNumbers(string numbers, string delimeter)
+        private static string ExtractNumberString(string numbers, string delimeter)
         {
             string stringToProcess = numbers;
 
-            if (numbers.StartsWith("//"))
+            if (StringContainsDelimeter(numbers))
             {
                 stringToProcess = numbers.Split('\n')[1];
             }
@@ -36,19 +38,16 @@ namespace StringCalculator
 
         private static string GetDelimeterFromString(string numbers)
         {
-            if (numbers.StartsWith("//"))
-            {
-                return numbers.Split('\n')[0].Replace("//", string.Empty);
-            }
+            var val = numbers.Split('\n')[0].Replace("//[", string.Empty);
 
-            return "|";
+            return val.Substring(0, val.Length - 1);
         }
 
         private static IEnumerable<int> GetIntArray(string numbers, string delimeter)
         {
             var singles = new List<int>();
             var negatives = new List<int>();
-            
+
             foreach (var stringInt in numbers.Split(new string[] { delimeter }, StringSplitOptions.None))
             {
                 var converted = Convert.ToInt32(stringInt);
@@ -69,6 +68,11 @@ namespace StringCalculator
             }
 
             return singles.ToArray();
+        }
+
+        private static bool StringContainsDelimeter(string numbers)
+        {
+            return numbers.StartsWith("//[") && numbers.Split('\n')[0].EndsWith("]");
         }
     }
 }

@@ -71,9 +71,9 @@ namespace StringCalculator
             Assert.AreEqual(expected, actual);
         }
 
-        [TestCase("//;\n1;2;1")]
-        [TestCase("//,\n1,2,1")]
-        [TestCase("//|\n1|2|1")]
+        [TestCase("//[;]\n1;2;1")]
+        [TestCase("//[,]\n1,2,1")]
+        [TestCase("//[|]\n1|2|1")]
         public void provide_delimeter_add_three_numbers_should_return_sum(string input)
         {
             int expected = 4;
@@ -128,7 +128,7 @@ namespace StringCalculator
         public void delimeter_of_any_length()
         {
             int expected = 6;
-            int actual = StringCalculator.Add("//***\n1***2***3");
+            int actual = StringCalculator.Add("//[***]\n1***2***3");
 
             Assert.AreEqual(expected, actual);
         }
