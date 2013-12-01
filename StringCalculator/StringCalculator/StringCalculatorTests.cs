@@ -114,5 +114,14 @@ namespace StringCalculator
 
             Assert.AreEqual(expected, actual);
         }
+
+        [Test]
+        public void include_number_greater_than_one_thousand_expect_them_to_be_ignored()
+        {
+            int expected = 50;
+            int actual = StringCalculator.Add("50,1001");
+
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

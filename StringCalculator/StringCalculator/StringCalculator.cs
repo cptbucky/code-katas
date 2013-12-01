@@ -44,7 +44,7 @@ namespace StringCalculator
             return '|';
         }
 
-        private static int[] GetIntArray(string numbers, char delimeter)
+        private static IEnumerable<int> GetIntArray(string numbers, char delimeter)
         {
             var singles = new List<int>();
             var negatives = new List<int>();
@@ -57,7 +57,7 @@ namespace StringCalculator
                 {
                     negatives.Add(converted);
                 }
-                else
+                else if (converted <= 1000)
                 {
                     singles.Add(converted);
                 }
