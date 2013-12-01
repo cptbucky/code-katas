@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
@@ -83,6 +84,39 @@ namespace StringCalculator
             Assert.AreEqual(expected, actual);
         }
 
+        [Test]
+        public void add_a_negative_number_should_throw_exception_and_list_in_message()
+        {
+            string expected = "negatives not allowed (-1)";
+
+            var exception = Assert.Throws<Exception>(() => Add("-1"));
+            var actual = exception.Message;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void add_negative_numbers_should_throw_exception_and_list_in_message()
+        {
+            string expected = "negatives not allowed (-2,-6,-9)";
+
+            var exception = Assert.Throws<Exception>(() => Add("-2,-6,-9"));
+            var actual = exception.Message;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void add_mixed_numbers_should_throw_exception_and_list_in_message()
+        {
+            string expected = "negatives not allowed (-2,-9)";
+
+            var exception = Assert.Throws<Exception>(() => Add("-2,-9"));
+            var actual = exception.Message;
+
+            Assert.AreEqual(expected, actual);
+        }
+
         private static int Add(string numbers)
         {
             if (numbers == string.Empty)
@@ -123,9 +157,29 @@ namespace StringCalculator
 
         private static int[] GetIntArray(string numbers, char delimeter)
         {
-            int[] singles = numbers.Split(delimeter).Select(x => Convert.ToInt32(x)).ToArray();
+            var singles = new List<int>();
+            var negatives = new List<int>();
+            
+            foreach (var stringInt in numbers.Split(delimeter))
+            {
+                var converted = Convert.ToInt32(stringInt);
 
-            return singles;
+                if (converted < 0)
+                {
+                    negatives.Add(converted);
+                }
+                else
+                {
+                    singles.Add(converted);
+                }
+            }
+
+            if (negatives.Count > 0)
+            {
+                throw new Exception(string.Format("negatives not allowed ({0})", string.Join(",", negatives)));
+            }
+
+            return singles.ToArray();
         }
     }
 }
