@@ -22,7 +22,7 @@ namespace StringCalculator
             return singles.Sum();
         }
 
-        private static string ExtractStringOfNumbers(string numbers, char delimeter)
+        private static string ExtractStringOfNumbers(string numbers, string delimeter)
         {
             string stringToProcess = numbers;
 
@@ -31,25 +31,25 @@ namespace StringCalculator
                 stringToProcess = numbers.Split('\n')[1];
             }
 
-            return stringToProcess.Replace('\n', delimeter).Replace(',', delimeter);
+            return stringToProcess.Replace("\n", delimeter).Replace(",", delimeter);
         }
 
-        private static char GetDelimeterFromString(string numbers)
+        private static string GetDelimeterFromString(string numbers)
         {
             if (numbers.StartsWith("//"))
             {
-                return Convert.ToChar(numbers.Split('\n')[0].Replace("//", string.Empty));
+                return numbers.Split('\n')[0].Replace("//", string.Empty);
             }
 
-            return '|';
+            return "|";
         }
 
-        private static IEnumerable<int> GetIntArray(string numbers, char delimeter)
+        private static IEnumerable<int> GetIntArray(string numbers, string delimeter)
         {
             var singles = new List<int>();
             var negatives = new List<int>();
             
-            foreach (var stringInt in numbers.Split(delimeter))
+            foreach (var stringInt in numbers.Split(new string[] { delimeter }, StringSplitOptions.None))
             {
                 var converted = Convert.ToInt32(stringInt);
 

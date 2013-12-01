@@ -123,5 +123,14 @@ namespace StringCalculator
 
             Assert.AreEqual(expected, actual);
         }
+
+        [Test]
+        public void delimeter_of_any_length()
+        {
+            int expected = 6;
+            int actual = StringCalculator.Add("//***\n1***2***3");
+
+            Assert.AreEqual(expected, actual);
+        }
     }
 }
