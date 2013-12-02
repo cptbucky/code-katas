@@ -1,38 +1,49 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace RomanNumeralsKata
 {
     [TestFixture]
     public class Class1
     {
-        [Test]
-        public void roman_numeral_for_one_expect_I()
+        // test values 1 through 9
+        // test values incrementing by 10, 10 through 90
+        // test values incrementing by 100, 100 through 900
+        // test values incrementing by 1000, 1000 through 3000
+
+        [TestCase(1, Result = "I")]
+        [TestCase(2, Result = "II")]
+        [TestCase(3, Result = "III")]
+        [TestCase(4, Result = "IV")]
+        public string roman_numeral_for_single_digit(int arabic)
         {
-            string expected = "I";
-
-            string actual = GetRomanNumeral(1);
-
-            Assert.AreEqual(expected, actual);
+            return GetRomanNumeral(arabic);
         }
 
-        [Test]
-        public void roman_numeral_for_two_expect_II()
+        enum RomanNumerals
         {
-            string expected = "II";
-
-            string actual = GetRomanNumeral(2);
-
-            Assert.AreEqual(expected, actual);
+            I = 1,
+            IV = 4
         }
 
-        private string GetRomanNumeral(int number)
+        private string GetRomanNumeral(int arabic)
         {
-            if (number == 2)
+            string romanNumeral = string.Empty;
+
+            var values = Enum.GetValues(typeof(RomanNumerals));
+
+            for (int i = values.Length - 1; i >= 0; i--)
             {
-                return "II";
+                var value = (int)values.GetValue(i);
+
+                while (arabic >= value)
+                {
+                    romanNumeral += Enum.GetName(typeof(RomanNumerals), value);
+                    arabic -= value;
+                }
             }
 
-            return "I";
+            return romanNumeral;
         }
     }
 }
