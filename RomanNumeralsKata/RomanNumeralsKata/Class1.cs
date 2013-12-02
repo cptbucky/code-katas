@@ -15,6 +15,11 @@ namespace RomanNumeralsKata
         [TestCase(2, Result = "II")]
         [TestCase(3, Result = "III")]
         [TestCase(4, Result = "IV")]
+        [TestCase(5, Result = "V")]
+        [TestCase(6, Result = "VI")]
+        [TestCase(7, Result = "VII")]
+        [TestCase(8, Result = "VIII")]
+        [TestCase(9, Result = "IX")]
         public string roman_numeral_for_single_digit(int arabic)
         {
             return GetRomanNumeral(arabic);
@@ -23,7 +28,9 @@ namespace RomanNumeralsKata
         enum RomanNumerals
         {
             I = 1,
-            IV = 4
+            IV = 4,
+            V = 5,
+            IX = 9
         }
 
         private string GetRomanNumeral(int arabic)
