@@ -132,5 +132,14 @@ namespace StringCalculator
 
             Assert.AreEqual(expected, actual);
         }
+
+        [Test]
+        public void provide_multiple_delimiters()
+        {
+            int expected = 20;
+            int actual = StringCalculator.Add("//[|][;]\n5|8;7");
+
+            Assert.AreEqual(expected, actual);
+        }
     }
 }
