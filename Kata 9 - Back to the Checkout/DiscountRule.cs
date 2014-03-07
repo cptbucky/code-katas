@@ -10,12 +10,13 @@
     public class DiscountRule : IDiscountRule
     {
         public int NoOfSkus { get; set; }
+
         public int DiscountValue { get; set; }
 
         public DiscountRule(int noOfSkus, int discountToApply)
         {
-            NoOfSkus = noOfSkus;
-            DiscountValue = discountToApply;
+            this.NoOfSkus = noOfSkus;
+            this.DiscountValue = discountToApply;
         }
     }
 }

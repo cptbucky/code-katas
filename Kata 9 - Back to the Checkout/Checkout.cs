@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Checkout
+﻿namespace Checkout
 {
+    using System.Collections.Generic;
+
     public interface ICheckout
     {
         int Total { get; }
@@ -11,22 +11,27 @@ namespace Checkout
 
     public class Checkout : ICheckout
     {
-        public int Total {
-            get { return _pricingEngine.GetTotalPriceOfSkus(_scannedSkus.ToArray()); }
+        public int Total
+        {
+            get
+            {
+                return this._pricingEngine.GetTotalPriceOfSkus(this._scannedSkus.ToArray());
+            }
         }
 
         private readonly List<char> _scannedSkus;
+
         private readonly IPricingEngine _pricingEngine;
 
         public Checkout(IPricingEngine pricingEngine)
         {
-            _scannedSkus = new List<char>();
-            _pricingEngine = pricingEngine;
+            this._scannedSkus = new List<char>();
+            this._pricingEngine = pricingEngine;
         }
 
         public void Scan(char sku)
         {
-            _scannedSkus.Add(sku);
+            this._scannedSkus.Add(sku);
         }
     }
 }
